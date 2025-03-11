@@ -24,7 +24,7 @@ import (
 var (
 	welogConfig = Config{
 		ElasticIndex:    "welog2",
-		ElasticURL:      "http://localhost:9200",
+		ElasticURL:      "http://182.19.168.194:9200",
 		ElasticUsername: "elastic",
 		ElasticPassword: "changeme",
 		ResBodyType:     "string",

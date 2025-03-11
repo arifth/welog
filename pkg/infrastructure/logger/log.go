@@ -4,13 +4,17 @@
 package logger
 
 import (
+	"context"
 	"fmt"
 	"github.com/cruseraca/welog/pkg/constant/envkey"
+	"github.com/cruseraca/welog/pkg/util"
 	"github.com/elastic/go-elasticsearch/v8"
 	"github.com/goccy/go-json"
 	"github.com/sirupsen/logrus"
 	"go.elastic.co/ecslogrus"
 	"gopkg.in/go-extras/elogrus.v8"
+	"io"
+	"net/http"
 	"net/url"
 	"os"
 	"sync"
@@ -69,8 +73,14 @@ func logger() *logrus.Logger {
 		log.Error(err)
 		return log
 	}
+	type Response struct {
+		StatusCode int
+		Header     http.Header
+		Body       io.ReadCloser
+	}
 
-	res, err := c.Ping()
+	ctx := context.Background()
+	res, err := util.TimeoutPing(ctx, 1*time.Second, c)
 	if err != nil {
 		log.Error(err)
 		return log
